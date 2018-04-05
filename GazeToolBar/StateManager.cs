@@ -32,6 +32,9 @@ namespace GazeToolBar
         bool micIsOn = false;
         bool resetFlag = false;
 
+        //trying keypress magnifier
+        KeyPressZoom keyPressZoom;
+
 
         public StateManager(Form1 Toolbar, ShortcutKeyWorker shortCutKeyWorker, FormsEyeXHost EyeXHost)
         {
@@ -48,11 +51,15 @@ namespace GazeToolBar
 
             SystemFlags.hasSelectedButtonColourBeenReset = true;
 
+
             // Instantiate the ZoomLens, this is the form that is given to magnifier
             zoomer = new ZoomLens();
             // Instantiate the magnifier, this is Sam Medlocks refactored magnifier
             // This calls the low-level API
             magnifier = CreateMagnifier();
+
+            // Instantiate KeyPressZoom - possible replacement fore ZoomLens/ZoomMagnifier
+            keyPressZoom = new KeyPressZoom();
 
             //Console.WriteLine(scrollWorker.deadZoneRect.LeftBound + "," + scrollWorker.deadZoneRect.RightBound + "," + scrollWorker.deadZoneRect.TopBound + "," + scrollWorker.deadZoneRect.BottomBound);
 
@@ -72,8 +79,17 @@ namespace GazeToolBar
         {
             //these flags are here so that they get reset before anything else happens in the SM
             //these were previously in the action method but that causes issues because the update state is run again before all of the flags are reset.
-            zoomer.ResetZoomLens();
-            magnifier.Stop();
+
+            //
+            //shouldn't need ZoomLens with keypress zoom
+            //
+            //zoomer.ResetZoomLens();
+            //magnifier.Stop();
+
+            //---------------------
+            keyPressZoom.closeMagnifier();
+
+
             SystemFlags.fixationRunning = false;
             SystemFlags.actionButtonSelected = false;
             SystemFlags.fixationRunning = false;
@@ -82,7 +98,9 @@ namespace GazeToolBar
             fixationWorker.IsZoomerFixation(false);
             currentState = SystemState.Wait;
             SystemFlags.currentState = SystemState.Wait;
-            zoomer.Refresh();
+
+            //------------------------
+            //zoomer.Refresh();
 
             fixationWorker = new FixationDetection();
         }
@@ -142,7 +160,10 @@ namespace GazeToolBar
                     else if (SystemFlags.timeOut)
                     {
                         EnterWaitState();
-                        zoomer.ResetZoomLens();
+
+                        //----------------------
+                        //zoomer.ResetZoomLens();
+                        keyPressZoom.closeMagnifier();
                     }
                     break;
                 case SystemState.ScrollWait:
@@ -200,9 +221,11 @@ namespace GazeToolBar
                     }
                     if (Program.readSettings.selectionFeedback) //don't show the crosshair if selection feedback is off
                     {
-                        zoomer.Start();
-                        zoomer.Show();
-                        zoomer.CrossHairPos = fixationWorker.getXY();
+                        //-------------------------
+                        //zoomer.Start();
+                        //zoomer.Show();
+                        //zoomer.CrossHairPos = fixationWorker.getXY();
+                        keyPressZoom.win_zoom_in();
                     }
                     break;
                 case SystemState.Zooming:
@@ -217,19 +240,23 @@ namespace GazeToolBar
                     {
                         fixationPoint = fixationWorker.getXY();//get the location the user looked
                     }
-                    magnifier.Timer.Enabled = true;
+
+                    //--------------------------
+                    //magnifier.Timer.Enabled = true;
                     // magnifier.UpdatePosition(fixationPoint);
                     // Give the magnifier the point on screen to magnify
-                    magnifier.FixationPoint = fixationPoint;
-                    Point p1 = Utils.DividePoint(magnifier.Offset, magnifier.MagnifierDivAmount());
-                    Point p2 = Utils.DividePoint(magnifier.SecondaryOffset, magnifier.MagnifierDivAmount());
+                    //magnifier.FixationPoint = fixationPoint;
+                    //Point p1 = Utils.DividePoint(magnifier.Offset, magnifier.MagnifierDivAmount());
+                    //Point p2 = Utils.DividePoint(magnifier.SecondaryOffset, magnifier.MagnifierDivAmount());
 
-                    Point o = Utils.SubtractPoints(p1, p2);
+                    //Point o = Utils.SubtractPoints(p1, p2);
 
-                    zoomer.Offset = o;                    // This initiate's the timer for drawing of the user feedback image
-                    zoomer.Start();
-                    zoomer.Show();
-                    zoomer.CrossHairPos = magnifier.GetLookPosition();
+                    //zoomer.Offset = o;                    // This initiate's the timer for drawing of the user feedback image
+                    //zoomer.Start();
+                    //zoomer.Show();
+                    //zoomer.CrossHairPos = magnifier.GetLookPosition();
+
+                    keyPressZoom.win_zoom_in();
 
                     //disable neccesary flags 
                     SystemFlags.hasGaze = false;
@@ -241,7 +268,9 @@ namespace GazeToolBar
                         fixationWorker.StartDetectingFixation();
                         SystemFlags.fixationRunning = true;
                     }
-                    zoomer.CrossHairPos = magnifier.GetLookPosition();
+
+                    //---------------------------------
+                    //zoomer.CrossHairPos = magnifier.GetLookPosition();
                     //SetZoomerOffset();
                     break;
                 case SystemState.ApplyAction: //the fixation on the zoom lens has been detected
@@ -249,17 +278,17 @@ namespace GazeToolBar
 
                     //SetZoomerOffset();
 
-                    fixationPoint.X += zoomer.Offset.X;
-                    fixationPoint.Y += zoomer.Offset.Y;
+                    //fixationPoint.X += zoomer.Offset.X;
+                    //fixationPoint.Y += zoomer.Offset.Y;
 
-                    fixationPoint = magnifier.GetLookPosition();
-                    zoomer.ResetZoomLens();//hide the lens
+                    //fixationPoint = magnifier.GetLookPosition();
+                    //zoomer.ResetZoomLens();//hide the lens
                                            //  MessageBox.Show(magnifier.SecondaryOffset.X + " " + magnifier.SecondaryOffset.Y);
                                            //Set the magnification factor back to initial value
                                            // This is done so that a "dynamic zoom in" feature can be
                                            // implemented in the future
-                    magnifier.ResetZoomValue();
-                    magnifier.Stop();
+                    //magnifier.ResetZoomValue();
+                    //magnifier.Stop();
 
 
                     //execute the appropriate action
@@ -313,12 +342,13 @@ namespace GazeToolBar
 
         public void RefreshZoom()
         {
-            magnifier.Stop();
+            //magnifier.Stop();
 
-            zoomer = new ZoomLens();
-            magnifier = CreateMagnifier();
-            zoomer.ResetZoomLens();
-            magnifier.ResetZoomValue();
+            //zoomer = new ZoomLens();
+            //magnifier = CreateMagnifier();
+            //zoomer.ResetZoomLens();
+            //magnifier.ResetZoomValue();
+            keyPressZoom.closeMagnifier();
             EnterWaitState();
         }
     }

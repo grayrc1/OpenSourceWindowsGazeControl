@@ -169,6 +169,7 @@
     <Compile Include="IFixationSmoother.cs" />
     <Compile Include="KeyboardHook.cs" />
     <Compile Include="KeyConverter.cs" />
+    <Compile Include="KeyPressZoom.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReletiveSize.cs" />
