@@ -74,8 +74,8 @@ namespace GazeToolBar
             int inLeft = sourceRect.left;
             int inTop = sourceRect.top;
             
-            sourceRect.left = Clamp(sourceRect.left, 0, screenBounds.Width - width);
-            sourceRect.top = Clamp(sourceRect.top, 0, screenBounds.Height - height);
+            sourceRect.left = (int)(Clamp(sourceRect.left, 0, screenBounds.Width - width));
+            sourceRect.top = (int)(Clamp(sourceRect.top, 0, screenBounds.Height - height));
             
             int fnLeft = sourceRect.left - inLeft;
             int fnTop = sourceRect.top - inTop;
@@ -93,7 +93,7 @@ namespace GazeToolBar
             NativeMethods.InvalidateRect(hwndMag, IntPtr.Zero, true); // Force redraw.
         }
 
-        public override int MagnifierDivAmount()
+        public override float MagnifierDivAmount()
         {
             return 1;
         }

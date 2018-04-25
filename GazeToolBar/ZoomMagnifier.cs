@@ -38,6 +38,7 @@ namespace GazeToolBar
 
         public ZoomMagnifier(Form displayform, Point fixationPoint)
         {
+
             ZOOM_MAX = Program.readSettings.maxZoom;          //Max zoom amount
             Magnification = DO_ZOOM ? 1 : Program.readSettings.maxZoom; //Set magnification to the max if not zooming
             form = displayform;
@@ -102,18 +103,18 @@ namespace GazeToolBar
             form.Left = zoomPosition.X - (form.Width / 2);
             form.Top = zoomPosition.Y - (form.Height / 2);
 
-            int initLeft = form.Left;
-            int initTop = form.Top;
+            float initLeft = form.Left;
+            float initTop = form.Top;
 
-            form.Left = Clamp(form.Left, 0, screenBounds.Width - form.Width);
-            form.Top = Clamp(form.Top, 0, screenBounds.Height - form.Height);
+            form.Left = (int)(Clamp(form.Left, 0, screenBounds.Width - form.Width));
+            form.Top = (int)(Clamp(form.Top, 0, screenBounds.Height - form.Height));
 
-            int finalLeft = form.Left;
-            int finalTop = form.Top;
+            float finalLeft = form.Left;
+            float finalTop = form.Top;
 
             Utils.Print("Position-", initLeft, initTop, finalLeft, finalTop);
-            int offsetX = finalLeft - initLeft;
-            int offsetY = finalTop - initTop;
+            float offsetX = finalLeft - initLeft;
+            float offsetY = finalTop - initTop;
 
             //Offset = new Point(offsetX, offsetY);
             Utils.Print("Offset-", offsetX, offsetY);
@@ -131,14 +132,14 @@ namespace GazeToolBar
             Point zoomPosition = Utils.SubtractPoints(GetZoomPosition(), Offset);
             Rectangle screenBounds = Screen.FromControl(form).Bounds;
             //Magnified width and height
-            int width = (int)(form.Width / Magnification);
-            int height = (int)(form.Height / Magnification);
+            float width = (int)(form.Width / Magnification);
+            float height = (int)(form.Height / Magnification);
 
             //Zoom rectangle position
-            sourceRect.left = zoomPosition.X - (width / 2);
-            sourceRect.top = zoomPosition.Y - (height / 2);
-            sourceRect.left = Clamp(sourceRect.left, 0, screenBounds.Width - width);
-            sourceRect.top = Clamp(sourceRect.top, 0, screenBounds.Height - height);
+            sourceRect.left = (int)(zoomPosition.X - (width / 2));
+            sourceRect.top = (int)(zoomPosition.Y - (height / 2));
+            sourceRect.left = (int)(Clamp(sourceRect.left, 0, screenBounds.Width - width));
+            sourceRect.top = (int)(Clamp(sourceRect.top, 0, screenBounds.Height - height));
 
             NativeMethods.MagSetWindowSource(hwndMag, sourceRect);  //Sets the source of the zoom
             NativeMethods.InvalidateRect(hwndMag, IntPtr.Zero, true); // Force redraw.
@@ -159,8 +160,8 @@ namespace GazeToolBar
         }
 
         //TODO: move to utility class
-        //Forces an int to be between two integers
-        public int Clamp(int current, int min, int max)
+        //Forces an float to be between two floategers
+        public float Clamp(int current, float min, float max)
         {
             return (current < min) ? min : (current > max) ? max : current;
         }
@@ -226,7 +227,7 @@ namespace GazeToolBar
             form.Hide();
         }
 
-        public virtual int MagnifierDivAmount()
+        public virtual float MagnifierDivAmount()
         {
             return (int)ZOOM_MAX;
         }

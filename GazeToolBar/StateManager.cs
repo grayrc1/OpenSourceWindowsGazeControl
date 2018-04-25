@@ -218,11 +218,11 @@ namespace GazeToolBar
                         fixationPoint = fixationWorker.getXY();//get the location the user looked
                     }
                     magnifier.Timer.Enabled = true;
-                    // magnifier.UpdatePosition(fixationPoint);
+                    magnifier.UpdatePosition(fixationPoint);
                     // Give the magnifier the point on screen to magnify
-                    magnifier.FixationPoint = fixationPoint;
-                    Point p1 = Utils.DividePoint(magnifier.Offset, magnifier.MagnifierDivAmount());
-                    Point p2 = Utils.DividePoint(magnifier.SecondaryOffset, magnifier.MagnifierDivAmount());
+                    // magnifier.FixationPoint = fixationPoint;
+                    Point p1 = Utils.DividePoint(magnifier.Offset, (int)magnifier.MagnifierDivAmount());
+                    Point p2 = Utils.DividePoint(magnifier.SecondaryOffset, (int)magnifier.MagnifierDivAmount());
 
                     Point o = Utils.SubtractPoints(p1, p2);
 
@@ -308,7 +308,8 @@ namespace GazeToolBar
 
         private ZoomMagnifier CreateMagnifier()
         {
-            return new ZoomMagnifierCentered(zoomer, fixationPoint);
+            //return new ZoomMagnifierCentered(zoomer, fixationPoint);
+            return new ZoomMagnifier(zoomer, fixationPoint);
         }
 
         public void RefreshZoom()
