@@ -38,7 +38,7 @@ namespace GazeToolBar
 
         public ZoomMagnifier(Form displayform, Point fixationPoint)
         {
-
+            //MessageBox.Show(fixationPoint.ToString());
             ZOOM_MAX = Program.readSettings.maxZoom;          //Max zoom amount
             Magnification = DO_ZOOM ? 1 : Program.readSettings.maxZoom; //Set magnification to the max if not zooming
             form = displayform;
@@ -97,6 +97,9 @@ namespace GazeToolBar
 
         public virtual void UpdatePosition(Point fixationPoint)
         {
+            //FixationPoint = fixationPoint;
+
+            MessageBox.Show(fixationPoint.ToString());
             Point zoomPosition = fixationPoint;
             Rectangle screenBounds = Screen.FromControl(form).Bounds;
 
@@ -129,11 +132,14 @@ namespace GazeToolBar
             }
 
             sourceRect = new RECT();
+    
             Point zoomPosition = Utils.SubtractPoints(GetZoomPosition(), Offset);
             Rectangle screenBounds = Screen.FromControl(form).Bounds;
             //Magnified width and height
             float width = (int)(form.Width / Magnification);
             float height = (int)(form.Height / Magnification);
+
+            //TODO zoomPosition is always 0, 0 at this point!
 
             //Zoom rectangle position
             sourceRect.left = (int)(zoomPosition.X - (width / 2));
@@ -156,11 +162,12 @@ namespace GazeToolBar
         //Gets the position that the zoom will be centered on
         public Point GetZoomPosition()
         {
+            //TODO FixationPoint always 0,0
             return Utils.AddPoints(FixationPoint, Offset);
         }
 
         //TODO: move to utility class
-        //Forces an float to be between two floategers
+        //Forces a float to be between two floats
         public float Clamp(int current, float min, float max)
         {
             return (current < min) ? min : (current > max) ? max : current;
