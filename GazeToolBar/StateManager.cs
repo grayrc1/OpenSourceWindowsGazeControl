@@ -308,7 +308,7 @@ namespace GazeToolBar
 
         private ZoomMagnifier CreateMagnifier()
         {
-            return new ZoomMagnifierCentered(zoomer, fixationPoint);
+            return new ZoomMagnifier(zoomer, fixationPoint);
         }
 
         public void RefreshZoom()

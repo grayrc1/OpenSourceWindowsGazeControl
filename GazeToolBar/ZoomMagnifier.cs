@@ -140,6 +140,14 @@ namespace GazeToolBar
             sourceRect.left = Clamp(sourceRect.left, 0, screenBounds.Width - width);
             sourceRect.top = Clamp(sourceRect.top, 0, screenBounds.Height - height);
 
+
+            sourceRect.right = sourceRect.left + 200;
+            sourceRect.bottom = sourceRect.top + 200;
+
+            //MessageBox.Show(sourceRect.left.ToString() + sourceRect.right.ToString());
+
+            //I think this might be the area of screen that is magnified,
+            //not the place where the magnifier is.
             NativeMethods.MagSetWindowSource(hwndMag, sourceRect);  //Sets the source of the zoom
             NativeMethods.InvalidateRect(hwndMag, IntPtr.Zero, true); // Force redraw.
         }
@@ -178,6 +186,7 @@ namespace GazeToolBar
         {
             Zoom();
             UpdateMagnifier();
+            UpdatePosition(FixationPoint);
         }
 
         private void form_FormClosing(object sender, FormClosingEventArgs e)
@@ -234,16 +243,23 @@ namespace GazeToolBar
 
         public Point GetLookPosition()
         {
+
+            //TODO this returns crazy positon way off screen
             Point startPoint = new Point(sourceRect.left, sourceRect.top);
             Point actualLook = CurrentLook;
             Point formPos = new Point(form.Left, form.Top);
             Point adjustedPoint = Utils.SubtractPoints(actualLook, formPos);
             Point magAdjust = new Point((int)(adjustedPoint.X / ZOOM_MAX), (int)(adjustedPoint.Y / ZOOM_MAX));
 
-            Point finalPoint = Utils.AddPoints(magAdjust, startPoint);
+            //Point finalPoint = Utils.AddPoints(magAdjust, startPoint);
 
-            //  Point finalPoint = adjustedPoint;//Utils.SubtractPoints(Utils.AddPoints(startPoint, adjustedPoint), 1);
+            //Point finalPoint = adjustedPoint;//Utils.SubtractPoints(Utils.AddPoints(startPoint, adjustedPoint), 1);
             //  MessageBox.Show(adjustedPoint.X + " " + adjustedPoint.Y + " " + finalPoint.X + " " + finalPoint.Y);
+
+            Point finalPoint = actualLook;
+
+            //MessageBox.Show(startPoint.ToString());
+            //MessageBox.Show(finalPoint.ToString());
 
             return finalPoint;
         }
