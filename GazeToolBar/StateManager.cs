@@ -258,8 +258,10 @@ namespace GazeToolBar
                                            //Set the magnification factor back to initial value
                                            // This is done so that a "dynamic zoom in" feature can be
                                            // implemented in the future
-                    magnifier.ResetZoomValue();
                     magnifier.Stop();
+                    RefreshZoom();
+                    //magnifier.ResetZoomValue();
+                    
 
 
                     //execute the appropriate action

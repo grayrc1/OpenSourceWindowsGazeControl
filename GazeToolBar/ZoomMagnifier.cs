@@ -13,7 +13,7 @@ namespace GazeToolBar
         protected const int UPDATE_SPEED = 1; //how fast the lens will update
 
         //TODO: Move these to settings json
-        public static bool DO_ZOOM = false;         //Zoom enabled
+        public static bool DO_ZOOM = true;         //Zoom enabled
         public static float ZOOM_SPEED = 0.005F;    //Amount zoom will increment
         public static float ZOOM_MAX = Program.readSettings.maxZoom;          //Max zoom amount
 
@@ -156,8 +156,8 @@ namespace GazeToolBar
             sourceRect.top = Clamp(sourceRect.top, 0, screenBounds.Height - height);
 
 
-            sourceRect.right = sourceRect.left + 200;
-            sourceRect.bottom = sourceRect.top + 200;
+            //sourceRect.right = sourceRect.left + 200;
+            //sourceRect.bottom = sourceRect.top + 200;
 
             //MessageBox.Show(sourceRect.left.ToString() + sourceRect.right.ToString());
 
@@ -192,8 +192,8 @@ namespace GazeToolBar
         {
             Offset = new Point(0, 0);
             SecondaryOffset = new Point(0, 0);
-            Magnification = Program.readSettings.maxZoom;
-            MaxZoom = magnification;
+            Magnification = 1; // Program.readSettings.maxZoom;
+            MaxZoom = Program.readSettings.maxZoom; //magnification;
             Timer.Enabled = false;
         }
 
