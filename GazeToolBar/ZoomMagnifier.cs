@@ -27,6 +27,7 @@ namespace GazeToolBar
         protected RECT sourceRect;
         FormsEyeXHost eyeXHost;
         GazePointDataStream gazeStream;
+        protected FixationDetection fixationWorker;
 
         public Point CurrentLook { get; set; }
         public float MaxZoom { get; set; } //Max zoom amount
@@ -43,6 +44,7 @@ namespace GazeToolBar
             form = displayform;
             form.TopMost = true;
             updateTimer = new Timer();
+            fixationWorker = new FixationDetection();
 
             FixationPoint = fixationPoint;
             InitLens();
@@ -130,6 +132,19 @@ namespace GazeToolBar
             sourceRect = new RECT();
             Point zoomPosition = Utils.SubtractPoints(GetZoomPosition(), Offset);
             Rectangle screenBounds = Screen.FromControl(form).Bounds;
+
+            //where different code is in centered:
+            //TODO move values somewhere else
+            form.Width = 800;
+            form.Height = 600;
+            //TODO maybe update FixationPoint here?
+            
+            fixationWorker.StartDetectingFixation();
+            FixationPoint = fixationWorker.getXY();
+            UpdatePosition(FixationPoint);
+            //form.Top = 100;
+            //form.Left = 100;
+
             //Magnified width and height
             int width = (int)(form.Width / Magnification);
             int height = (int)(form.Height / Magnification);
@@ -186,7 +201,7 @@ namespace GazeToolBar
         {
             Zoom();
             UpdateMagnifier();
-            UpdatePosition(FixationPoint);
+            //UpdatePosition(FixationPoint);
         }
 
         private void form_FormClosing(object sender, FormClosingEventArgs e)

@@ -31,7 +31,7 @@ namespace GazeToolBar
             drawingForm = new DrawingForm();
             TopMost = true;
 
-            Location = new Point(-200, -200);
+            Location = new Point(200, 200);
         }
 
 

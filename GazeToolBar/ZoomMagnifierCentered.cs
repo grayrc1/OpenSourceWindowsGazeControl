@@ -50,6 +50,8 @@ namespace GazeToolBar
             sourceRect = new RECT();
             Point zoomPosition = Utils.SubtractPoints(GetZoomPosition(), Offset);
             Rectangle screenBounds = Screen.FromControl(form).Bounds;
+
+            //difference
             int offsetX = 0;
             offsetX = screenBounds.Left;
             form.Width = FORM_WIDTH;
@@ -62,6 +64,8 @@ namespace GazeToolBar
             int dY = FixationPoint.Y - (form.Top + FORM_HEIGHT / 2);
 
             Offset = new Point(dX, dY);
+
+            //
 
             //Magnified width and height
             int width = (int)(form.Width / Magnification);
