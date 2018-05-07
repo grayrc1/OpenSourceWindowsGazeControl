@@ -16,6 +16,7 @@ namespace GazeToolBar
         public static bool DO_ZOOM = true;         //Zoom enabled
         public static float ZOOM_SPEED = 0.005F;    //Amount zoom will increment
         public static float ZOOM_MAX = Program.readSettings.maxZoom;          //Max zoom amount
+        public static int SMOOTHER_BUFFER = 5;
 
         public Point FixationPoint { get; set; }
         public Point Offset { get; set; }  //Offset is the amount of pixels moved when repositioning the form if it is offscreen. It's used to reposition the Fixation point.
@@ -28,6 +29,7 @@ namespace GazeToolBar
         FormsEyeXHost eyeXHost;
         GazePointDataStream gazeStream;
         protected FixationDetection fixationWorker;
+        protected FixationSmootherExponential fixationSmoother;
 
         public Point CurrentLook { get; set; }
         public float MaxZoom { get; set; } //Max zoom amount
@@ -45,6 +47,7 @@ namespace GazeToolBar
             form.TopMost = true;
             updateTimer = new Timer();
             fixationWorker = new FixationDetection();
+            fixationSmoother = new FixationSmootherExponential(SMOOTHER_BUFFER);
 
             FixationPoint = fixationPoint;
             InitLens();
@@ -137,10 +140,15 @@ namespace GazeToolBar
             //TODO move values somewhere else
             form.Width = 800;
             form.Height = 600;
-            //TODO maybe update FixationPoint here?
             
+            
+
+            //Update fixation point and smooth it out with fixation smoother. 
             fixationWorker.StartDetectingFixation();
-            FixationPoint = fixationWorker.getXY();
+            Point fixationInstance = fixationWorker.getXY();
+            GazePoint smoothed = fixationSmoother.UpdateAndGetSmoothPoint(fixationInstance.X, fixationInstance.Y);
+            FixationPoint = new Point((int)smoothed.X, (int)smoothed.Y);
+
             UpdatePosition(FixationPoint);
             //form.Top = 100;
             //form.Left = 100;
@@ -192,7 +200,7 @@ namespace GazeToolBar
         {
             Offset = new Point(0, 0);
             SecondaryOffset = new Point(0, 0);
-            Magnification = 1; // Program.readSettings.maxZoom;
+            Magnification = Program.readSettings.maxZoom;
             MaxZoom = Program.readSettings.maxZoom; //magnification;
             Timer.Enabled = false;
         }
