@@ -14,7 +14,7 @@ namespace GazeToolBar
 
         //TODO: Move these to settings json
         public static bool DO_ZOOM = true;         //Zoom enabled
-        public static float ZOOM_SPEED = 0.005F;    //Amount zoom will increment
+        public static float ZOOM_SPEED = 0.1F;    //Amount zoom will increment
         public static float ZOOM_MAX = Program.readSettings.maxZoom;          //Max zoom amount
         public static int SMOOTHER_BUFFER = 5;
 
@@ -177,7 +177,12 @@ namespace GazeToolBar
 
         public void Zoom()
         {
-            if (DO_ZOOM)
+            //if (DO_ZOOM)
+            //{
+            //    Magnification += ZOOM_SPEED;
+            //}
+
+            if(Magnification < 3)
             {
                 Magnification += ZOOM_SPEED;
             }
@@ -200,7 +205,7 @@ namespace GazeToolBar
         {
             Offset = new Point(0, 0);
             SecondaryOffset = new Point(0, 0);
-            Magnification = Program.readSettings.maxZoom;
+            Magnification = 1; // Program.readSettings.maxZoom;
             MaxZoom = Program.readSettings.maxZoom; //magnification;
             Timer.Enabled = false;
         }
@@ -235,9 +240,9 @@ namespace GazeToolBar
                 if (magnification != value)
                 {
                     magnification = value;
-                    if (magnification > ZOOM_MAX)
+                    if (magnification > 3)//ZOOM_MAX)
                     {
-                        magnification = ZOOM_MAX;
+                        magnification = 3;//ZOOM_MAX;
                     }
                     // Set the magnification factor.
                     Transformation matrix = new Transformation(magnification);
