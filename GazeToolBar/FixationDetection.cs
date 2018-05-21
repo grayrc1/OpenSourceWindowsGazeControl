@@ -54,8 +54,8 @@ namespace GazeToolBar
         private EFixationState fixationState;
 
         //Field to record location of beginning fixation location.
-        private int xPosFixation = 0;
-        private int yPosFixation = 0;
+        private int xPosFixation;// = 0;
+        private int yPosFixation;// = 0;
 
 
         //Worker class to further smooth points if required.

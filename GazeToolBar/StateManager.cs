@@ -217,10 +217,20 @@ namespace GazeToolBar
                     {
                         fixationPoint = fixationWorker.getXY();//get the location the user looked
                     }
+
+                    //TODO put zoom window in correct place before starting timer (I think...)
+
+                    //magnifier.UpdateFixationPoint();
+                    magnifier.PlaceZoomWindow(fixationPoint);
+
+                    magnifier.FixationPoint = fixationPoint;
+
                     magnifier.Timer.Enabled = true;
                     // magnifier.UpdatePosition(fixationPoint);
                     // Give the magnifier the point on screen to magnify
-                    magnifier.FixationPoint = fixationPoint;
+
+                    //original position
+                    //magnifier.FixationPoint = fixationPoint;
                     Point p1 = Utils.DividePoint(magnifier.Offset, magnifier.MagnifierDivAmount());
                     Point p2 = Utils.DividePoint(magnifier.SecondaryOffset, magnifier.MagnifierDivAmount());
 
