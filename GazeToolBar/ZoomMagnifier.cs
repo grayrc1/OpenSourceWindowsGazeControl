@@ -125,8 +125,8 @@ namespace GazeToolBar
             //Offset = new Point(offsetX, offsetY);
             Utils.Print("Offset-", offsetX, offsetY);
         }
-
-        /*public void UpdateFixationPoint()
+        /*
+        public void UpdateFixationPoint()
         {
             Point fixationInstance = fixationWorker.getXY();
             FixationPoint = new Point(fixationInstance.X, fixationInstance.Y);
