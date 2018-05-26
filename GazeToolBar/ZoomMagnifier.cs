@@ -28,7 +28,7 @@ namespace GazeToolBar
         protected RECT sourceRect;
         FormsEyeXHost eyeXHost;
         GazePointDataStream gazeStream;
-        protected FixationDetection fixationWorker;
+        //protected FixationDetection fixationWorker;
         protected FixationSmootherExponential fixationSmoother;
         protected FixationSmootherExponential positionSmoother;
 
@@ -47,8 +47,8 @@ namespace GazeToolBar
             form = displayform;
             form.TopMost = true;
             updateTimer = new Timer();
-            fixationWorker = new FixationDetection();
-            fixationSmoother = (FixationSmootherExponential)fixationWorker.CreateSmoother(SMOOTHER_BUFFER);//new FixationSmootherExponential(SMOOTHER_BUFFER);
+            //fixationWorker = new FixationDetection();
+            //fixationSmoother = (FixationSmootherExponential)fixationWorker.CreateSmoother(SMOOTHER_BUFFER);//new FixationSmootherExponential(SMOOTHER_BUFFER);
             //positionSmoother = new FixationSmootherExponential(SMOOTHER_BUFFER);
 
             FixationPoint = fixationPoint;
@@ -126,12 +126,12 @@ namespace GazeToolBar
             Utils.Print("Offset-", offsetX, offsetY);
         }
 
-        public void UpdateFixationPoint()
+        /*public void UpdateFixationPoint()
         {
             Point fixationInstance = fixationWorker.getXY();
             FixationPoint = new Point(fixationInstance.X, fixationInstance.Y);
         }
-
+        */
         public void PlaceZoomWindow(Point fixationPoint)
         {
             sourceRect = new RECT();
@@ -170,47 +170,7 @@ namespace GazeToolBar
             //FixationPoint = new Point((int)smoothed.X, (int)smoothed.Y);
 
             PlaceZoomWindow(FixationPoint);
-            /*
-             * I've moved this code to PlaceZoomWindow
-             * 
-            sourceRect = new RECT();
-            Point zoomPosition = Utils.SubtractPoints(GetZoomPosition(), Offset);
-            //Point zoomPosition = Utils.SubtractPoints(getZoomPositionSmoothed(), Offset);
-            Rectangle screenBounds = Screen.FromControl(form).Bounds;
-
-            //where different code is in centered:
-            //TODO move values somewhere else
-            form.Width = 800;
-            form.Height = 600;
             
-            
-
-
-
-            UpdatePosition(FixationPoint);
-            //form.Top = 100;
-            //form.Left = 100;
-
-            //Magnified width and height
-            int width = (int)(form.Width / Magnification);
-            int height = (int)(form.Height / Magnification);
-
-            //Zoom rectangle position
-            sourceRect.left = zoomPosition.X - (width / 2);
-            sourceRect.top = zoomPosition.Y - (height / 2);
-            sourceRect.left = Clamp(sourceRect.left, 0, screenBounds.Width - width);
-            sourceRect.top = Clamp(sourceRect.top, 0, screenBounds.Height - height);
-
-
-            //sourceRect.right = sourceRect.left + 200;
-            //sourceRect.bottom = sourceRect.top + 200;
-
-            //MessageBox.Show(sourceRect.left.ToString() + sourceRect.right.ToString());
-
-            //I think this might be the area of screen that is magnified,
-            //not the place where the magnifier is.
-            NativeMethods.MagSetWindowSource(hwndMag, sourceRect);  //Sets the source of the zoom
-            NativeMethods.InvalidateRect(hwndMag, IntPtr.Zero, true); // Force redraw.*/
         }
 
         public void Zoom()
@@ -320,7 +280,6 @@ namespace GazeToolBar
         public Point GetLookPosition()
         {
 
-            //TODO this returns crazy positon way off screen
             Point startPoint = new Point(sourceRect.left, sourceRect.top);
             Point actualLook = CurrentLook;
             Point formPos = new Point(form.Left, form.Top);
