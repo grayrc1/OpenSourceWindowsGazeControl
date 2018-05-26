@@ -218,7 +218,7 @@ namespace GazeToolBar
                         fixationPoint = fixationWorker.getXY();//get the location the user looked
                     }
 
-                    //TODO put zoom window in correct place before starting timer (I think...)
+                    //TODO put zoom window in correct place before starting timer (I think...) - Done.
 
                     //magnifier.UpdateFixationPoint();
                     
@@ -265,12 +265,12 @@ namespace GazeToolBar
                     //Wait, Whaaat? Setting the fixation point does nothing?
                     //Why was it set twice? Where is it set?
 
-                    fixationPoint = fixationWorker.getXY();
+                    //fixationPoint = fixationWorker.getXY();
 
                     //SetZoomerOffset();
 
-                    fixationPoint.X += zoomer.Offset.X;
-                    fixationPoint.Y += zoomer.Offset.Y;
+                    //fixationPoint.X += zoomer.Offset.X;
+                    //fixationPoint.Y += zoomer.Offset.Y;
 
                     fixationPoint = magnifier.GetLookPosition();
                     zoomer.ResetZoomLens();//hide the lens

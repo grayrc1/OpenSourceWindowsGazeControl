@@ -163,6 +163,8 @@ namespace GazeToolBar
                 return;
             }
 
+            //this only happens once, so can't be smoothed...
+
             //Update fixation point and smooth it out with fixation smoother. 
             //fixationWorker.StartDetectingFixation();
             //Point fixationInstance = fixationWorker.getXY();
