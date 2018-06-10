@@ -148,8 +148,22 @@ namespace GazeToolBar
             //Zoom rectangle position
             sourceRect.left = zoomPosition.X - (width / 2);
             sourceRect.top = zoomPosition.Y - (height / 2);
+
+            int inLeft = sourceRect.left;
+            int inTop = sourceRect.top;
+
             sourceRect.left = Clamp(sourceRect.left, 0, screenBounds.Width - width);
             sourceRect.top = Clamp(sourceRect.top, 0, screenBounds.Height - height);
+
+            int fnLeft = sourceRect.left - inLeft;
+            int fnTop = sourceRect.top - inTop;
+
+            if (SecondaryOffset.X == 0 && SecondaryOffset.Y == 0)
+            {
+                //     MessageBox.Show(SecondaryOffset.X + " " + SecondaryOffset.Y + " " + inLeft + " " + fnLeft);
+
+                SecondaryOffset = new Point(fnLeft, fnTop);
+            }
 
             NativeMethods.MagSetWindowSource(hwndMag, sourceRect);  //Sets the source of the zoom
             NativeMethods.InvalidateRect(hwndMag, IntPtr.Zero, true); // Force redraw.
